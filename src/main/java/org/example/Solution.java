@@ -46,32 +46,32 @@ class Solution {
     }
 
     public int[] searchRange34(int[] nums, int target) {
-        int[] res= {-1,-1};
-        if (nums.length==0){
+        int[] res = {-1, -1};
+        if (nums.length == 0) {
             return res;
         }
-        int left=0;
-        int right=nums.length-1;
-        int l1=left;
-        int r2=right;
-        int i=bisearch(nums,target,left,right);
-        if(i==-1){
+        int left = 0;
+        int right = nums.length - 1;
+        int l1 = left;
+        int r2 = right;
+        int i = bisearch(nums, target, left, right);
+        if (i == -1) {
             return res;
         }
-        res[0]=i;
-        res[1]=i;
+        res[0] = i;
+        res[1] = i;
 
-        int l2=i-1;
-        int r1=i+1;
+        int l2 = i - 1;
+        int r1 = i + 1;
         //查询l
         while (l1 <= l2) {
             int ii = (l1 + l2) / 2;
             if (nums[ii] < target) {
                 l1 = ii + 1;
-            } else if (nums[ii] > target){
+            } else if (nums[ii] > target) {
                 l2 = ii - 1;
             } else {
-                res[0]=ii;
+                res[0] = ii;
                 l2 = ii - 1;
             }
         }
@@ -80,19 +80,57 @@ class Solution {
             int ii = (r1 + r2) / 2;
             if (nums[ii] < target) {
                 r1 = ii + 1;
-            } else if (nums[ii] > target){
+            } else if (nums[ii] > target) {
                 r2 = ii - 1;
             } else {
-                res[1]=ii;
-                r1=ii+1;
+                res[1] = ii;
+                r1 = ii + 1;
             }
         }
         return res;
     }
 
+    public int mySqrt69(int x) {
+        if(x<2){
+            return x;
+        }
+        int left = 1;
+        int right = x;
+        while (left+1 < right) {
+            int i = (left + right) >>1;
+            if(x/i==i){
+                return i;
+            }else if(x/i<i){
+                right=i;
+            }else{ //<x
+                left=i;
+            }
+        }
+        return left;
+    }
+
+    public boolean isPerfectSquare367(int num) {
+        if(num<2){
+            return true;
+        }
+        int left = 1;
+        int right = num;
+        while (left+1 < right) {
+            int i = (left + right) >>1;
+            if(num/i==i){
+                return i * i == num;
+            }else if(num/i<i){
+                right=i;
+            }else{ //<x
+                left=i;
+            }
+        }
+        return false;
+    }
     /**
      * 折半查找有序数组
      * 返回target在nums中从left到right元素中存在的位置，没有则返回-1
+     *
      * @param nums
      * @param target
      * @param left
@@ -104,7 +142,7 @@ class Solution {
             int i = (left + right) / 2;
             if (nums[i] < target) {
                 left = i + 1;
-            } else if (nums[i] > target){
+            } else if (nums[i] > target) {
                 right = i - 1;
             } else {
                 return i;
