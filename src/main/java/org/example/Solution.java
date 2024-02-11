@@ -127,6 +127,195 @@ class Solution {
         }
         return false;
     }
+
+    public int removeElement27_1(int[] nums, int val) {
+        int l=nums.length;
+        for(int i=0;i<l;i++){
+            if(val==nums[i]){
+                //后面所有都往前移一位
+                for(int j=i+1;j<l;j++){
+                    nums[j-1]=nums[j];
+                }
+                i--;
+                l--;
+            }
+        }
+        return l;
+    }
+    public int removeElement27_2(int[] nums, int val) {
+        int left=0;
+        int right=nums.length-1;
+        while(left<=right){
+            while (left<=right&&nums[left]!=val){
+                left++;
+            }
+            while(left<=right&&nums[right]==val){
+                right--;
+            }
+            if(left<right) {
+                nums[left] = nums[right];
+                left++;
+                right--;
+            }
+        }
+        return left;
+    }
+
+    public int removeDuplicates26_1(int[] nums) {
+        int i=0;
+        int num=0;
+        int l=nums.length;
+        int tmp=-10001;
+        for(;i<l;i++){
+            if(tmp!=nums[i]){
+                tmp=nums[i];
+                num++;
+            }else{
+                for(int j=i+1;j<l;j++){
+                    nums[j-1]=nums[j];
+                }
+                l--;
+                i--;
+            }
+        }
+        return num;
+    }
+
+    public int removeDuplicates26_2(int[] nums) {
+        int l=nums.length;
+        if (l==1){
+            return 1;
+        }
+        int i0=0;
+        int i1=1;
+        while(i1<l){
+            while(i1<l && nums[i1]==nums[i0]){
+                i1++;
+            }
+            if(i1<l && nums[i0]!=nums[i1]){
+                nums[i0+1]=nums[i1];
+                i0++;
+                i1++;
+            }
+        }
+        return i0+1;
+    }
+
+    public void moveZeroes283(int[] nums) {
+        int l=nums.length;
+        if(l<2){
+            return;
+        }
+        int i0=0;
+        int i1=-1;
+        int cnt=0;
+        for(;i0<l;i0++){
+            if(nums[i0]==0){
+                cnt++;
+                if(i1==-1){
+                    i1=i0;
+                }
+            }else{
+                if(i1!=-1){
+                    nums[i1]=nums[i0];
+                    i1++;
+                }
+            }
+        }
+        for(int i=0;i<cnt;i++){
+            nums[l-i-1]=0;
+        }
+    }
+
+    public boolean backspaceCompare844(String s, String t) {
+        int i=s.length()-1;
+        int j=t.length()-1;
+        int skipS=0;
+        int skipT=0;
+
+        while(i>=0 || j>=0){
+            char cs=' ';
+            char cT=' ';
+            while(i>=0){
+                if(s.charAt(i)=='#'){
+                    skipS++;
+                    i--;
+                }else{
+                    if(skipS>0){
+                        skipS--;
+                        i--;
+                    }else{
+                        cs=s.charAt(i);
+                        break;
+                    }
+                }
+            }
+            while(j>=0){
+                if(t.charAt(j)=='#'){
+                    skipT++;
+                    j--;
+                }else{
+                    if(skipT>0){
+                        skipT--;
+                        j--;
+                    }else{
+                        cT=t.charAt(j);
+                        break;
+                    }
+                }
+            }
+            if(cs==cT){
+                i--;
+                j--;
+            }else{
+                return false;
+            }
+        }
+        return true;
+
+    }
+
+    public int[] sortedSquares977(int[] nums) {
+        int l=nums.length;
+        int[] res=new int[l];
+        int i=0;
+        int j=nums.length-1;
+        if(nums[i]>=0&&nums[j]>=0){
+            for(int ii=i;ii<=j;ii++){
+                res[ii]=nums[ii]*nums[ii];
+            }
+            return res;
+        }else if(nums[i]<0&&nums[j]<0){
+            for(int ii=i;ii<=j;ii++){
+                res[ii]=nums[i+j-ii]*nums[i+j-ii];
+            }
+            return res;
+        }
+        while(i<=j){
+            l--;
+            if(nums[i]+nums[j]>0){
+                res[l]=nums[j]*nums[j];
+                j--;
+            }else{
+                res[l]=nums[i]*nums[i];
+                i++;
+            }
+        }
+        return res;
+    }
+
+    public void replaceArr(int[] nums,int i,int j){
+        if(i==j){
+            return;
+        }
+        if(j>=nums.length||i>=nums.length){
+            return;
+        }
+        int tmp=nums[j];
+        nums[j]=nums[i];
+        nums[i]=tmp;
+    }
+
     /**
      * 折半查找有序数组
      * 返回target在nums中从left到right元素中存在的位置，没有则返回-1
