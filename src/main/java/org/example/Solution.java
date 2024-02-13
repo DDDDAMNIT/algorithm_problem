@@ -304,6 +304,66 @@ class Solution {
         return res;
     }
 
+    public int minSubArrayLen209(int target, int[] nums) {
+        int res=nums.length+1;
+        int left=0;//记录需要减掉的内容
+        int right=0;
+        int sum=0;
+        while(right<nums.length){
+            if(sum<target) {
+                sum += nums[right];
+            }
+            if(sum>=target){//这里可以用while减少循环次数
+                sum-=nums[left];
+//                sum-=nums[right];
+                res=Math.min(res,right-left+1);
+                left++;
+                if(left>right){
+                    right++;
+                }
+            }else{
+                right++;
+            }
+        }
+        if(res<nums.length+1) {
+            return res;
+        }else {
+            return 0;
+        }
+    }
+
+    public int totalFruit904(int[] fruits) {
+        int res=0;
+        int l=fruits.length;
+        int[] fruitRecords=new int[l];//默认0为未选中
+        int getType=0;//选中的种类，超过2就要操作了
+        int left=0;//窗口左边界
+        int right=0;//窗口右边界
+        int changePoint=0;//变动点(用于重定向窗口左边界)
+        int tmp=-1;//用于判断是否发生变动
+        for(;right<l;right++){
+            int fruit=fruits[right];
+            if(fruitRecords[fruit]==0){
+                fruitRecords[fruit]=1;
+                getType++;
+                if (getType>2){//要踢掉最前面的
+                    res=Math.max(res,right-left);//解算上一窗口数量
+                    fruitRecords[fruits[changePoint-1]]=0;
+                    getType--;
+                    left=changePoint;
+                }
+            }
+            if(fruit!=tmp){//发生变动
+                tmp=fruit;
+                changePoint=right;
+            }
+        }
+        if(right==l){
+            res=Math.max(res,right-left);
+        }
+        return res;
+    }
+
     public void replaceArr(int[] nums,int i,int j){
         if(i==j){
             return;

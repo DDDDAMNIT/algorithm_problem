@@ -5,16 +5,10 @@ package org.example;
 public class Main {
     public static void main(String[] args) {
         Solution solution=new Solution();
+        int[] fruits =new int[]{1,0,1,4,1,4,1,2,3};
+        int x=solution.totalFruit904(fruits);
 
-        String s="asw2r";
-        StringBuilder sb=new StringBuilder();
-        System.out.println(s);
-        for(int i=0;i<s.length();i++){
-            sb.append(s.charAt(i));
-        }
-        System.out.println(sb.toString());
-
-        System.out.println();
+        System.out.println(x);
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
         System.out.printf("Hello and welcome!%s","sdsd");
