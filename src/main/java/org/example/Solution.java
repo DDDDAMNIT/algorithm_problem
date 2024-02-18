@@ -364,6 +364,8 @@ class Solution {
         return res;
     }
 
+
+
     public void replaceArr(int[] nums,int i,int j){
         if(i==j){
             return;
