@@ -1,5 +1,8 @@
 package org.example;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * LeetCode
  */
@@ -364,7 +367,65 @@ class Solution {
         return res;
     }
 
+    //todo 这个题做的不好，耗时太多了，后面可以修改修改
+    public String minWindow76(String s, String t) {
+        Map<Character,Integer> mapT=new HashMap<>();
+        for(int i=0;i<t.length();i++){
+            char c=t.charAt(i);
+            if(mapT.containsKey(c)){
+                mapT.put(c,mapT.get(c)+1);
+            }else{
+                mapT.put(c,1);
+            }
+        }
+        int left=0;
+        int right=0;
+        int res=s.length()+1;
+        int ansLeft=0;
+        int ansRight=0;
+        for(;right<s.length();right++){
+            char cR=s.charAt(right);
+            if (mapT.containsKey(cR)){
+                mapT.put(cR,mapT.get(cR)-1);
+                //并判断是否达标
+                if(check76(mapT)){
+                    while(left<=right){
+                        char cL=s.charAt(left);
+                        if(mapT.containsKey(cL)){
+                            mapT.put(cL,mapT.get(cL)+1);
+                            if(!check76(mapT)){
+                                int ans=right-left+1;
+                                if(res>=ans){
+                                    res=ans;
+                                    ansLeft=left;
+                                    ansRight=right;
+                                }
+                                mapT.put(cL,mapT.get(cL)-1);
+                                break;
+                            }else{
+                                int ans=right-left+1;
+                                res=res<ans?res:ans;
+                            }
+                        }
+                        left++;
+                    }
+                }else {
+                    continue;
+                }
+            }
+        }
+        return res==s.length()+1?"":s.substring(ansLeft,ansRight+1);
+    }
 
+    public boolean check76(Map<Character,Integer> mapT){
+        for(Map.Entry<Character,Integer> entry:mapT.entrySet()){
+            int val=entry.getValue();
+            if(val>0){
+                return false;
+            }
+        }
+        return true;
+    }
 
     public void replaceArr(int[] nums,int i,int j){
         if(i==j){

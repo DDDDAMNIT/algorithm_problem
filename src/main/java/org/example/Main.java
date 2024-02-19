@@ -4,6 +4,11 @@ package org.example;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
+
+
+        String s="abcdefg";
+        String ss=s.substring(0,3);
+
         Solution solution=new Solution();
         int[] fruits =new int[]{1,0,1,4,1,4,1,2,3};
         int x=solution.totalFruit904(fruits);
