@@ -1,6 +1,8 @@
 package org.example;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -416,7 +418,6 @@ class Solution {
         }
         return res==s.length()+1?"":s.substring(ansLeft,ansRight+1);
     }
-
     public boolean check76(Map<Character,Integer> mapT){
         for(Map.Entry<Character,Integer> entry:mapT.entrySet()){
             int val=entry.getValue();
@@ -425,6 +426,153 @@ class Solution {
             }
         }
         return true;
+    }
+
+    public int[][] generateMatrix59(int n) {
+        if(n==1){
+            return new int[][]{{1}};
+        }
+        int[][] res=new int[n][n];
+        int circle=n/2+n%2;
+        int stepLength=n-1;
+        int direction=0%4;
+        int i=0;
+        int j=0;
+        int in=1;
+        //0 i不变j每次+1
+        //1 j不变i每次+1
+        //2 i不变j每次-1
+        //3 j不变i每次-1
+        while(stepLength>=0) {
+            if(stepLength==0){
+                res[i][j]=in;
+                break;
+            }
+            for (int s = 0; s < stepLength && in<=n*n; s++) {
+                res[i][j]=in;
+                in++;
+                if(direction==0){
+                    j++;
+                }else if(direction==1){
+                    i++;
+                }else if(direction==2){
+                    j--;
+                }else if(direction==3){
+                    i--;
+                }
+            }
+            direction++;
+            if(direction>=4){
+                j++;
+                i++;
+                direction=0;
+                stepLength -= 2;
+            }
+        }
+        return res;
+    }
+
+    public List<Integer> spiralOrder54(int[][] matrix) {
+        List<Integer> list=new ArrayList<>();
+        int down=matrix.length-1;
+        int right=matrix[0].length-1;
+        int sum=(right+1)*(down+1);
+        int i=0,j=0;
+        int in=1;
+        while (down>0||right>0){
+            if(right>0) {
+                for (int s = 0; s < right && in <= sum; s++) {
+                    list.add(matrix[i][j]);
+                    j++;
+                    in++;
+                }
+
+            }
+            if(down>0) {
+                for (int s = 0; s < down && in <= sum; s++) {
+                    list.add(matrix[i][j]);
+                    i++;
+                    in++;
+                }
+
+            }
+            if(right>0) {
+                for (int s = 0; s < right && in <= sum; s++) {
+                    list.add(matrix[i][j]);
+                    j--;
+                    in++;
+                }
+
+            }
+            if(down>0) {
+                for (int s = 0; s < down && in <= sum; s++) {
+                    list.add(matrix[i][j]);
+                    i--;
+                    in++;
+                }
+            }
+            i++;
+            j++;
+            down-=2;
+            right-=2;
+        }
+        if(down==0&&right==0){
+            list.add(matrix[i][j]);
+        }
+        return list;
+    }
+
+    public int[] spiralArrayLCR146(int[][] array) {
+        if(array.length==0){
+            return new int[0];
+        }
+        int down=array.length-1;
+        int right=array[0].length-1;
+        int sum=(right+1)*(down+1);
+        int[] res=new int[sum];
+        int i=0,j=0;
+        int in=0;
+        while (down>0||right>0){
+            if(right>0) {
+                for (int s = 0; s < right && in < sum; s++) {
+                    res[in]=array[i][j];
+                    j++;
+                    in++;
+                }
+
+            }
+            if(down>0) {
+                for (int s = 0; s < down && in < sum; s++) {
+                    res[in]=array[i][j];
+                    i++;
+                    in++;
+                }
+
+            }
+            if(right>0) {
+                for (int s = 0; s < right && in < sum; s++) {
+                    res[in]=array[i][j];
+                    j--;
+                    in++;
+                }
+
+            }
+            if(down>0) {
+                for (int s = 0; s < down && in < sum; s++) {
+                    res[in]=array[i][j];
+                    i--;
+                    in++;
+                }
+            }
+            i++;
+            j++;
+            down-=2;
+            right-=2;
+        }
+        if(down==0&&right==0){
+            res[sum-1]=array[i][j];
+        }
+        return res;
     }
 
     public void replaceArr(int[] nums,int i,int j){

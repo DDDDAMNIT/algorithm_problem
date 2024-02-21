@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.List;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
@@ -10,8 +12,9 @@ public class Main {
         String ss=s.substring(0,3);
 
         Solution solution=new Solution();
-        int[] fruits =new int[]{1,0,1,4,1,4,1,2,3};
-        int x=solution.totalFruit904(fruits);
+        int[][] fruits =new int[][]{{1,2,3}, {4,5,6},{7,8,9}};
+        List<Integer> x=solution.spiralOrder54(fruits);
+        System.out.println(x);
 
         System.out.println(x);
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
