@@ -4,18 +4,10 @@ package org.example;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
+        int[][] arr=new int[10][];
+        int[] arr1=new int[10];
         Solution solution=new Solution();
-        MyLinkedList707 myLinkedList707 = new MyLinkedList707();
-        myLinkedList707.addAtHead(2);
-        myLinkedList707.deleteAtIndex(1);
-        myLinkedList707.addAtHead(2);
-        myLinkedList707.addAtHead(7);
-        myLinkedList707.addAtHead(3);
-        myLinkedList707.addAtHead(2);
-        myLinkedList707.addAtHead(5);
-        myLinkedList707.addAtTail(5);
-        myLinkedList707.get(5);
-        myLinkedList707.deleteAtIndex(6);
-        myLinkedList707.deleteAtIndex(4);
+        String[] strs={"eat","tea","tan","ate","nat","bat"};
+        solution.groupAnagrams49_2(strs);
     }
 }

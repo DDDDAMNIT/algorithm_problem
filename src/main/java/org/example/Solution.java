@@ -1,9 +1,6 @@
 package org.example;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * LeetCode
@@ -611,19 +608,339 @@ class Solution {
     }
 
     public ListNode reverseList206(ListNode head) {
-        if(head==null){
+        //双指针，每次后面的指向前面的
+        ListNode tmp=null;
+        ListNode dn1=null;
+        ListNode dn2=head;
+        while(dn2!=null){
+            tmp=dn2.next;
+            dn2.next=dn1;
+            dn1=dn2;
+            dn2=tmp;
+        }
+        return dn1;
+    }
+
+    public ListNode swapPairs24(ListNode head) {
+        if(head==null||head.next==null){
             return head;
         }
-        ListNode left=null;
-        ListNode right=head;
+        ListNode dummy=new ListNode(-1,head);
         ListNode tmp=null;
-        while(right!=null){
-            tmp=right.next;
-            right.next=left;
-            left=right;
-            right=tmp;
+        ListNode dn1=dummy;
+        ListNode dn2=head;
+        while(dn2!=null&&dn2.next!=null){
+            dn1.next=dn2.next;
+            tmp=dn2.next.next;
+            dn2.next.next=dn2;
+            dn2.next=tmp;
+            dn1=dn2;
+            dn2=dn2.next;
         }
-        return left;
+        return dummy.next;
+    }
+
+    public ListNode removeNthFromEnd19(ListNode head, int n) {
+        ListNode dummy=new ListNode(-1,head);
+        ListNode dn1=dummy;
+        ListNode dn2=dummy;
+        while(n>0){
+            dn1=dn1.next;
+            n--;
+        }
+        while(dn1.next!=null){
+            dn1=dn1.next;
+            dn2=dn2.next;
+        }
+        dn2.next=dn2.next.next;
+        return dummy.next;
+    }
+
+    public ListNode getIntersectionNode160(ListNode headA, ListNode headB) {
+        ListNode dn1=headA;
+        ListNode dn2=headB;
+        int l1=0,l2=0;
+        while(dn1!=null){
+            dn1=dn1.next;
+            l1++;
+        }
+        while(dn2!=null){
+            dn2=dn2.next;
+            l2++;
+        }
+        if(dn1!=dn2){
+            return null;
+        }
+        int diff=0;
+        if(l1>=l2){
+            diff=l1-l2;//1先走
+            dn1=headA;
+            dn2=headB;
+            while(diff-->0){
+                dn1=dn1.next;
+            }
+            while(l2-->0){
+                if(dn1==dn2){
+                    return dn1;
+                }else{
+                    dn1=dn1.next;
+                    dn2=dn2.next;
+                }
+            }
+        }else{
+            diff=l2-l1;//2先走
+            dn1=headA;
+            dn2=headB;
+            while(diff-->0){
+                dn2=dn2.next;
+            }
+            while(l1-->0){
+                if(dn1==dn2){
+                    return dn1;
+                }else{
+                    dn1=dn1.next;
+                    dn2=dn2.next;
+                }
+            }
+        }
+        return null;
+    }
+
+    public ListNode detectCycle142(ListNode head) {
+        ListNode dn1=head;
+        ListNode dn2=head;
+        while(dn2!=null&&dn2.next!=null){
+            dn2=dn2.next.next;
+            dn1=dn1.next;
+            if(dn2==dn1){
+                //有环
+                while(head!=dn1){
+                    head=head.next;
+                    dn1=dn1.next;
+                }
+                return head;
+            }
+        }
+        return null;
+    }
+
+    public boolean isAnagram242(String s, String t) {
+        char[] arrS=s.toCharArray();
+        char[] arrT=t.toCharArray();
+        int[] arr=new int[26];
+        for(int i=0;i<arrS.length;i++){
+            arr[arrS[i]-'a']++;
+        }
+        for(int i=0;i<arrT.length;i++){
+            arr[arrT[i]-'a']--;
+        }
+        for(int i=0;i<26;i++){
+            if(arr[i]!=0){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public List<List<String>> groupAnagrams49_1(String[] strs) {
+        List<List<String>> ans=new ArrayList<>();
+        int l=strs.length;
+        int iArr=0;
+        int[][] arr=new int[l][];
+        for(int i=0;i<l;i++){
+            char[] arrT=strs[i].toCharArray();
+            boolean b=false;
+            for(int j=0;j<iArr;j++){
+                if(arr[j]==null){
+                    break;
+                }
+                if(isAnagramArr(arr[j],arrT)){
+                    //有就装到对应的List里
+                    ans.get(j).add(strs[i]);
+                    b=true;
+                    break;
+                }
+            }
+            //遍历完都没有就新建List
+            if(!b){
+                List<String > list=new ArrayList<>();
+                list.add(strs[i]);
+                ans.add(list);
+                int[] arr0=new int[26];
+                for(int i0=0;i0<arrT.length;i0++){
+                    arr0[arrT[i0]-'a']++;
+                }
+                arr[iArr]=arr0;
+                iArr++;
+            }
+        }
+        return ans;
+    }
+
+    public List<List<String>> groupAnagrams49_2(String[] strs) {
+        List<List<String>> ans=new ArrayList<>();
+        int l=strs.length;
+        int iArr=0;
+        Map<String,Integer> map=new HashMap<>();
+        for(int i=0;i<l;i++){
+            char[] arrT=strs[i].toCharArray();
+            Arrays.sort(arrT);
+            String arrS=new String(arrT);
+            if(!map.containsKey(arrS)){
+                List<String > list=new ArrayList<>();
+                list.add(strs[i]);
+                ans.add(list);
+                map.put(arrS,iArr++);
+            }else{
+                ans.get(map.get(arrS)).add(strs[i]);
+            }
+        }
+        return ans;
+    }
+
+    public List<Integer> findAnagrams438(String s, String p) {
+        List<Integer> ans=new ArrayList<>();
+        int lp=p.length();
+        int i=0;
+        int[] arrp=toAnagramArr(p);
+        char[] arrs=s.toCharArray();
+        int last=0;
+        for(;i+lp<=s.length();i++){
+            if(last==0){
+                last=1;
+                boolean b=true;
+                for(int j=0;j<lp;j++){
+                    arrp[arrs[j]-'a']--;
+                }
+                for(int i1=0;i1<26;i1++){
+                    if(arrp[i1]!=0){
+                        b=false;
+                    }
+                }
+                if(b){
+                    ans.add(i);
+                }
+            }
+            else{
+                boolean b=true;
+                arrp[arrs[i-1]-'a']++;
+                arrp[arrs[i+lp-1]-'a']--;
+                for(int i1=0;i1<26;i1++){
+                    if(arrp[i1]!=0){
+                        b=false;
+                    }
+                }
+                if(b){
+                    ans.add(i);
+                }
+            }
+        }
+        return ans;
+    }
+
+    public int[] intersection349(int[] nums1, int[] nums2) {
+        Set<Integer> list=new HashSet<>();
+        Set<Integer> list1=new HashSet<>();
+        for(int i:nums1){
+            list1.add(i);
+        }
+        for(int j:nums2){
+            if(list1.contains(j)){
+                list.add(j);
+            }
+        }
+        int[] res=new int[list.size()];
+        int index=0;
+        for(Integer ii:list){
+            res[index]=ii;
+            index++;
+        }
+        return res;
+    }
+
+    public int[] intersect350(int[] nums1, int[] nums2) {
+        List<Integer> list=new ArrayList<>();
+        int[] arr1=new int[1001];
+        int[] arr2=new int[1001];
+        for(int i:nums1){
+            arr1[i]++;
+        }
+        for(int i:nums2){
+            arr2[i]++;
+        }
+        for(int i=0;i<1001;i++){
+            if(arr1[i]>0&&arr2[i]>0){
+                for(int j=0;j<Math.min(arr1[i], arr2[i]);j++){
+                    list.add(i);
+                }
+            }
+        }
+        int[] res=new int[list.size()];
+        for(int i=0;i<list.size();i++){
+            res[i]=list.get(i);
+        }
+        return res;
+    }
+
+    public boolean isHappy202(int n) {
+        Set<Integer> set=new HashSet<>();
+        while (n!=1){
+            if(set.contains(n)){
+                break;
+            }else{
+                set.add(n);
+            }
+            n=happyStep1(n);
+        }
+        if(n==1){
+            return true;
+        }
+        return false;
+    }
+
+    public int[] twoSum1(int[] nums, int target) {
+        Map<Integer,Integer> map=new HashMap<>();
+        int[] res=new int[2];
+        for(int i=0;i<nums.length;i++){
+            if(map.containsKey(nums[i])){
+                res[0]=i;
+                res[1]=map.get(nums[i]);
+                return res;
+            }else{
+                map.put(target-nums[i],i);
+            }
+        }
+        return res;
+    }
+
+    private int happyStep1(int n){
+        int res=0;
+        while(n>0){
+            int c=n%10;
+            n=n/10;
+            res+=c*c;
+        }
+        return res;
+    }
+    private int[] toAnagramArr(String s){
+        char[] arrS=s.toCharArray();
+        int[] arr=new int[26];
+        for(int i=0;i<arrS.length;i++){
+            arr[arrS[i]-'a']++;
+        }
+        return arr;
+    }
+    private boolean isAnagramArr(int[] arr,char arrT[]){
+        int[] arrTime=Arrays.copyOf(arr,26);
+        for(int i0=0;i0<arrT.length;i0++){
+            arrTime[arrT[i0]-'a']--;
+        }
+        for(int i1=0;i1<26;i1++){
+            if(arrTime[i1]!=0){
+                return false;
+            }
+        }
+        return true;
     }
     public void replaceArr(int[] nums, int i, int j) {
         if (i == j) {
@@ -636,7 +953,6 @@ class Solution {
         nums[j] = nums[i];
         nums[i] = tmp;
     }
-
     /**
      * 折半查找有序数组
      * 返回target在nums中从left到right元素中存在的位置，没有则返回-1
