@@ -913,6 +913,134 @@ class Solution {
         return res;
     }
 
+    public int fourSumCount454(int[] nums1, int[] nums2, int[] nums3, int[] nums4) {
+        int res=0;
+        Map<Integer,Integer> map1=new HashMap<>();
+        for(int x1:nums1){
+            for(int x2:nums2){
+                map1.put(x1+x2,map1.getOrDefault(x1+x2,0)+1);
+            }
+        }
+        for(int x3:nums3){
+            for(int x4:nums4){
+                res+=map1.getOrDefault(-x3-x4,0);
+            }
+        }
+        return res;
+    }
+
+    public boolean canConstruct383(String ransomNote, String magazine) {
+        char[] arrS=ransomNote.toCharArray();
+        int[] arr=new int[26];
+        for(int i=0;i<arrS.length;i++){
+            arr[arrS[i]-'a']++;
+        }
+        char[] arrM=magazine.toCharArray();
+        for(int i=0;i<arrM.length;i++){
+            arr[arrM[i]-'a']--;
+        }
+        for(int i1=0;i1<26;i1++){
+            if(arr[i1]>0){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //todo 此题需要重做
+    public List<List<Integer>> threeSum15(int[] nums) {
+        List<List<Integer>> res=new ArrayList<>();
+        Arrays.sort(nums);
+        for(int i=0;i<nums.length;i++){
+            if(i>0&&nums[i]==nums[i-1]){
+                continue;
+            }
+            int left=i+1;
+            int right=nums.length-1;
+            while(left<right){
+                if(nums[i]+nums[right]+nums[left]==0){
+                    //记录结果
+                    List<Integer> l=new ArrayList<>();
+                    l.add(nums[i]);
+                    l.add(nums[left]);
+                    l.add(nums[right]);
+                    res.add(l);
+                    while(left<right&&nums[left]==nums[left+1]){
+                        left++;
+                    }
+                    while(left<right&&nums[right]==nums[right-1]){
+                        right--;
+                    }
+                    left++;
+                    right--;
+                }else if(nums[i]+nums[right]+nums[left]<0){
+                    left++;
+                }else{
+                    right--;
+                }
+            }
+        }
+        return res;
+    }
+
+    public List<List<Integer>> fourSum18(int[] nums, int target) {
+        List<List<Integer>> res=new ArrayList<>();
+        if (nums == null || nums.length < 4) {
+            return res;
+        }
+        Arrays.sort(nums);
+        int len=nums.length;
+        for(int i=0;i<len-3;i++){
+            if(nums[i]>target&&nums[i]>0){
+                break;
+            }
+            if((long)nums[i]+nums[i+1]+nums[i+2]+nums[i+3]>target){
+                break;
+            }
+            if((long)nums[i]+nums[len-1]+nums[len-2]+nums[len-3]<target){
+                continue;
+            }
+            if(i>0&&nums[i]==nums[i-1]){
+                continue;
+            }
+            for(int j=i+1;j<len-2;j++){
+                if(nums[i]+nums[j]>target&&nums[i]+nums[j]>0){
+                    break;
+                }
+                if((long)nums[i]+nums[j]+nums[j+1]+nums[j+2]>target){
+                    break;
+                }
+                if((long)nums[i]+nums[j]+nums[len-1]+nums[len-2]<target){
+                    continue;
+                }
+                if(j>i+1&&nums[j]==nums[j-1]){
+                    continue;
+                }
+                int l=j+1;
+                int r=len-1;
+                while(l<r){
+                    if(nums[i]+nums[j]+nums[l]+nums[r]==target){
+                        res.add(Arrays.asList(nums[i],nums[j],nums[l],nums[r]));
+                        while(l<r&&nums[l]==nums[l+1]){
+                            l++;
+                        }
+                        while(l<r&&nums[r]==nums[r-1]){
+                            r--;
+                        }
+                        l++;
+                        r--;
+                    }else if(nums[i]+nums[j]+nums[l]+nums[r]<target){
+                        l++;
+                    }else{
+                        r--;
+                    }
+                }
+
+            }
+        }
+        return res;
+    }
+
     private int happyStep1(int n){
         int res=0;
         while(n>0){

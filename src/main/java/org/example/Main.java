@@ -7,7 +7,7 @@ public class Main {
         int[][] arr=new int[10][];
         int[] arr1=new int[10];
         Solution solution=new Solution();
-        String[] strs={"eat","tea","tan","ate","nat","bat"};
-        solution.groupAnagrams49_2(strs);
+        int[] strs={-1,0,1,2,-1,-4};
+        solution.threeSum15(strs);
     }
 }
