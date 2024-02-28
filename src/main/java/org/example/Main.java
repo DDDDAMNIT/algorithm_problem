@@ -8,6 +8,7 @@ public class Main {
         int[] arr1=new int[10];
         Solution solution=new Solution();
         int[] strs={-1,0,1,2,-1,-4};
-        solution.threeSum15(strs);
+        String s="  hello  world!  ";
+        solution.reverseWords151(s);
     }
 }

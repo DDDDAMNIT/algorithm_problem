@@ -1041,6 +1041,71 @@ class Solution {
         return res;
     }
 
+    public void reverseString344(char[] s) {
+        char tmp;
+        int l=s.length;
+        for(int i=0;i<s.length/2;i++){
+            tmp=s[i];
+            s[i]=s[l-i-1];
+            s[l-i-1]=tmp;
+        }
+    }
+
+    public String reverseStr541(String s, int k) {
+        char[] sArr=s.toCharArray();
+        int len=sArr.length;
+        int time=len/k;
+        int i=0;
+        for (;i<time;i++){
+            if(i%2==0){
+                reverseCharArr(sArr,i*k,i*k+k);
+            }else{
+                continue;
+            }
+        }
+        if(i%2==0){
+            reverseCharArr(sArr,i*k,len);
+        }
+        return new String(sArr);
+    }
+
+    public String reverseWords151(String s) {
+        //这题的标准做法是先去除多余空格、再翻转每个单词、再翻转整个字符串
+        String[] sArr=s.split(" ");
+        StringBuilder sb=new StringBuilder();
+        int len=sArr.length;
+        for(int i=0;i<len;i++){
+            if(sArr[len-i-1].isEmpty()){
+                continue;
+            }
+            sb.append(sArr[len-i-1]).append(" ");
+        }
+        sb.deleteCharAt(sb.length()-1);
+        return sb.toString();
+    }
+
+    public String num2Number(String s){
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            char c=s.charAt(i);
+            if(c>'9'||c<'0'){
+                sb.append(c);
+            }else{
+                sb.append("number");
+            }
+        }
+        return sb.toString();
+    }
+
+    public void reverseCharArr(char[] s,int left,int right) {
+        //包括left，不包括right
+        char tmp;
+        for(int i=left;i<(left+right)/2;i++){
+            tmp=s[i];
+            s[i]=s[left+right-i-1];
+            s[left+right-i-1]=tmp;
+        }
+    }
     private int happyStep1(int n){
         int res=0;
         while(n>0){
