@@ -913,6 +913,7 @@ class Solution {
         return res;
     }
 
+    //todo 过段时间再看看
     public int fourSumCount454(int[] nums1, int[] nums2, int[] nums3, int[] nums4) {
         int res=0;
         Map<Integer,Integer> map1=new HashMap<>();
@@ -1082,6 +1083,81 @@ class Solution {
         }
         sb.deleteCharAt(sb.length()-1);
         return sb.toString();
+    }
+
+    /**
+     * KMP算法实现字符串匹配（KMP貌似也是动态规划的一种？）
+     * @param haystack
+     * @param needle
+     * @return
+     */
+    public int strStr28(String haystack, String needle) {
+        char[] arrH=haystack.toCharArray();
+        char[] arrN=needle.toCharArray();
+        int len=arrN.length;
+        if(len==0){
+            return 0;
+        }
+        int[] next=getNext(arrN);
+        int j=0;
+        int res=-1;
+        for (int i=0;i<arrH.length;i++){
+            while(j>0&&arrN[j]!=arrH[i]){
+                j=next[j-1];
+            }
+            if(arrN[j]==arrH[i]){
+                j++;
+            }
+            if(j==len){
+                res=i-j+1;
+                return res;
+            }
+        }
+        return res;
+    }
+
+    //todo 这个题可以以后再做一遍加深理解
+    public boolean repeatedSubstringPattern459(String s) {
+        char[] arr=s.toCharArray();;
+        int len=arr.length;
+        if(len<=1){
+            return false;
+        }
+        int[] next=new int[len];
+        int j=0;
+        next[0]=j;
+        for(int i=1;i<len;i++){
+            while(j>0&&arr[i]!=arr[j]){
+                j=next[j-1];
+            }
+            if(arr[i]==arr[j]){
+                j++;
+            }
+            next[i]=j;
+        }
+        if(next[len-1]>0&&len%(len-next[len-1])==0){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+
+    private int[] getNext(char[] arrN){
+        int len=arrN.length;
+        int[] next=new int[len];
+        int j=0;
+        next[0]=j;
+        for(int i=1;i<len;i++){
+            while(j>0&&arrN[i]!=arrN[j]){
+                j=next[j-1];
+            }
+            if(arrN[j]==arrN[i]){
+                j++;
+            }
+            next[i]=j;
+        }
+        return next;
     }
 
     public String num2Number(String s){
