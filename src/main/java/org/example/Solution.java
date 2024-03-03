@@ -1142,6 +1142,97 @@ class Solution {
         }
     }
 
+    public boolean isValid20(String s) {
+        char[] arr=s.toCharArray();
+        Stack<Character> stack=new Stack<Character>();
+        for(int i=0;i<arr.length;i++){
+            if(arr[i]=='('){
+                stack.push('(');
+            }
+            else if(arr[i]=='{'){
+                stack.push('{');
+            }
+            else if(arr[i]=='['){
+                stack.push('[');
+            }
+            else if(arr[i]==')'){
+                if(stack.empty()){
+                    return false;
+                }
+                if(stack.pop()!='('){
+                    return false;
+                }
+            }
+            else if(arr[i]=='}'){
+                if(stack.empty()){
+                    return false;
+                }
+                if(stack.pop()!='{'){
+                    return false;
+                }
+            }
+            else if(arr[i]==']'){
+                if(stack.empty()){
+                    return false;
+                }
+                if(stack.pop()!='['){
+                    return false;
+                }
+            }
+        }
+        return stack.empty();
+    }
+
+    //todo 这个题可以用双指针法更快解决（效率4倍
+    public String removeDuplicates1047(String s) {
+        if(s.length()<2){
+            return s;
+        }
+        StringBuilder sb=new StringBuilder();
+        char[] arr=s.toCharArray();
+        LinkedList<Character> queue=new LinkedList();
+        for(int i=0;i<arr.length;i++){
+            if(queue.peekLast()==null){
+                queue.offer(arr[i]);
+            }else {
+                if (queue.peekLast() == arr[i]) {
+                    queue.pollLast();
+                } else {
+                    queue.offer(arr[i]);
+                }
+            }
+        }
+
+        while(!queue.isEmpty()){
+            sb.append(queue.poll());
+        }
+        return sb.toString();
+    }
+
+    //todo 这个题可以用递归做，节约非常多时间，听说stack相关内容都可以用递归做，很神奇
+    public int evalRPN150(String[] tokens) {
+        Stack<Integer> stack=new Stack<>();
+        for(int i=0;i<tokens.length;i++){
+            if("+".equals(tokens[i])){
+                int x=stack.pop()+stack.pop();
+                stack.push(x);
+            }else if("-".equals(tokens[i])){
+                int x=stack.pop()-stack.pop();
+                stack.push(-x);
+            }else if("*".equals(tokens[i])){
+                int x=stack.pop()*stack.pop();
+                stack.push(x);
+            }else if("/".equals(tokens[i])){
+                int x2=stack.pop();
+                int x1=stack.pop();
+                int x=x1/x2;
+                stack.push(x);
+            }else{
+                stack.push(Integer.valueOf(tokens[i]));
+            }
+        }
+        return stack.pop();
+    }
 
     private int[] getNext(char[] arrN){
         int len=arrN.length;
