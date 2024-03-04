@@ -1234,6 +1234,56 @@ class Solution {
         return stack.pop();
     }
 
+    //todo 这道题基本是抄答案的，还没有完全理解单调队列的操作方式
+    public int[] maxSlidingWindow239(int[] nums, int k) {
+        int len=nums.length;
+        int n=len-k+1;
+        int[] res=new int[n];
+        Deque<Integer> deque=new LinkedList<>();//单调递减队列存放坐标
+        for(int i=0;i<len;i++){
+            while(!deque.isEmpty()&&nums[i]>=nums[deque.peekLast()]){
+                deque.pollLast();
+            }
+            deque.addLast(i);
+            if(i-deque.peekFirst()>=k){
+                deque.pollFirst();
+            }
+            if(i>=k-1){//过了窗口长度之后每个都要记录
+                res[i-k+1]=nums[deque.peekFirst()];
+            }
+        }
+        return res;
+    }
+    //todo 这道题基本是抄答案的，还没有完全理解单调队列的操作方式
+    public int longestSubarray1438(int[] nums, int limit) {
+        int len=nums.length;
+        int j=0;
+        int res=0;
+        Deque<Integer> dequeMax=new LinkedList<>();
+        Deque<Integer> dequeMin=new LinkedList<>();
+        for(int i=0;i<len;i++){
+            while(!dequeMax.isEmpty()&&nums[dequeMax.peekLast()]<nums[i]){
+                dequeMax.pollLast();
+            }
+            dequeMax.addLast(i);
+            while(!dequeMin.isEmpty()&&nums[dequeMin.peekLast()]>nums[i]){
+                dequeMin.pollLast();
+            }
+            dequeMin.addLast(i);
+            while(nums[dequeMax.peekFirst()]-nums[dequeMin.peekFirst()]>limit){
+                if(j==dequeMax.peekFirst()){
+                    dequeMax.pollFirst();
+                }
+                if(j==dequeMin.peekFirst()){
+                    dequeMin.pollFirst();
+                }
+                j++;
+            }
+            res=Math.max(res,i-j+1);
+        }
+        return res;
+    }
+
     private int[] getNext(char[] arrN){
         int len=arrN.length;
         int[] next=new int[len];
