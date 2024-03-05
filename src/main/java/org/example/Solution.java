@@ -1236,20 +1236,22 @@ class Solution {
 
     //todo 这道题基本是抄答案的，还没有完全理解单调队列的操作方式
     public int[] maxSlidingWindow239(int[] nums, int k) {
-        int len=nums.length;
-        int n=len-k+1;
-        int[] res=new int[n];
-        Deque<Integer> deque=new LinkedList<>();//单调递减队列存放坐标
-        for(int i=0;i<len;i++){
-            while(!deque.isEmpty()&&nums[i]>=nums[deque.peekLast()]){
-                deque.pollLast();
+        int n=nums.length;
+        int[] res=new int[n-k+1];
+        Deque<Integer> q=new LinkedList<>();
+        int j=0;
+        for(int i=0;i<n;i++){
+            //入
+            while(!q.isEmpty()&&nums[i]>=nums[q.peekLast()]){
+                q.pollLast();
             }
-            deque.addLast(i);
-            if(i-deque.peekFirst()>=k){
-                deque.pollFirst();
+            q.addLast(i);
+            //出
+            if(!q.isEmpty()&&i-q.peekFirst()>=k){
+                q.pollFirst();
             }
-            if(i>=k-1){//过了窗口长度之后每个都要记录
-                res[i-k+1]=nums[deque.peekFirst()];
+            if(i>=k-1){
+                res[i-k+1]=nums[q.peekFirst()];
             }
         }
         return res;
@@ -1282,6 +1284,18 @@ class Solution {
             res=Math.max(res,i-j+1);
         }
         return res;
+    }
+
+    public int[] topKFrequent347(int[] nums, int k) {
+        Map<Integer,Integer> map=new HashMap<>();
+        for(int i=0;i<nums.length;i++){
+            int x=map.getOrDefault(nums[i],0);
+            map.put(nums[i],x+1);
+        }
+        Deque<Integer> q=new LinkedList<>();
+        for(Map.Entry<Integer,Integer> entry:map.entrySet()){
+
+        }
     }
 
     private int[] getNext(char[] arrN){
