@@ -1236,23 +1236,24 @@ class Solution {
 
     //todo 这道题基本是抄答案的，还没有完全理解单调队列的操作方式
     public int[] maxSlidingWindow239(int[] nums, int k) {
-        int n=nums.length;
-        int[] res=new int[n-k+1];
-        Deque<Integer> q=new LinkedList<>();
-        int j=0;
-        for(int i=0;i<n;i++){
-            //入
-            while(!q.isEmpty()&&nums[i]>=nums[q.peekLast()]){
-                q.pollLast();
+        int l=nums.length;
+        int[] res=new int[l-k+1];
+        Deque<Integer> queue=new LinkedList<>();
+        for(int i=0;i<l;i++){
+            //in
+            while(!queue.isEmpty() && nums[i]>nums[queue.peekLast()]){
+                queue.pollLast();
             }
-            q.addLast(i);
-            //出
-            if(!q.isEmpty()&&i-q.peekFirst()>=k){
-                q.pollFirst();
+            queue.addLast(i);
+            //out，窗口范围不再包含队列头上的元素
+            if(i-queue.peekFirst()>=k){
+                queue.pollFirst();
             }
+            //ans
             if(i>=k-1){
-                res[i-k+1]=nums[q.peekFirst()];
+                res[i-k+1]=nums[queue.peekFirst()];
             }
+            queue.
         }
         return res;
     }
@@ -1287,15 +1288,51 @@ class Solution {
     }
 
     public int[] topKFrequent347(int[] nums, int k) {
-        Map<Integer,Integer> map=new HashMap<>();
-        for(int i=0;i<nums.length;i++){
-            int x=map.getOrDefault(nums[i],0);
-            map.put(nums[i],x+1);
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int num : nums){
+            map.put(num, map.getOrDefault(num, 0) + 1);
         }
-        Deque<Integer> q=new LinkedList<>();
-        for(Map.Entry<Integer,Integer> entry:map.entrySet()){
+        PriorityQueue<int[]> pq = new PriorityQueue<>((pair1, pair2)->pair2[1]-pair1[1]);
+        for(Map.Entry<Integer, Integer> entry:map.entrySet()){
+            pq.add(new int[]{entry.getKey(), entry.getValue()});
+        }
+        int[] res = new int[k];
+        for(int i = 0; i < k; i++){
+            res[i] = pq.poll()[0];
+        }
+        return res;
+    }
 
+    public void quickSort(int[] arr, int start, int end) {
+        // 递归结束条件:start大于或等于end时
+        if (start < end) {
+            // 得到基准元素位置
+            int pivotIndex = partition(arr, start, end);
+            // 根据基准元素，分成两部分进行递归排序
+            quickSort(arr, start, pivotIndex - 1);
+            quickSort(arr, pivotIndex + 1, end);
         }
+    }
+    private int partition(int[] arr, int start, int end) {
+        // 取第1个位置的元素作为基准元素
+        int pivot = arr[start];
+        int left = start;
+        int right = end;
+
+        while (left < right) {
+            //right指针左移
+            while (left < right && arr[right] >= pivot) right--;
+            //left指针右移
+            while (left < right && arr[left] <= pivot) left++;
+            if (left >= right) break;
+            //交换left和right 指针所指向的元素
+            arr[left] = arr[left] + arr[right] - (arr[right] = arr[left]);
+        }
+        // 将基准元素与指针重合点所指的元素进行交换
+        arr[start] = arr[left];
+        arr[left] = pivot;
+
+        return left;
     }
 
     private int[] getNext(char[] arrN){
