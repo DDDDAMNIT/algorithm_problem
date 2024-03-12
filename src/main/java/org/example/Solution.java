@@ -1,5 +1,7 @@
 package org.example;
 
+import sun.nio.cs.ext.IBM037;
+
 import java.util.*;
 
 /**
@@ -1236,24 +1238,21 @@ class Solution {
 
     //todo 这道题基本是抄答案的，还没有完全理解单调队列的操作方式
     public int[] maxSlidingWindow239(int[] nums, int k) {
-        int l=nums.length;
-        int[] res=new int[l-k+1];
-        Deque<Integer> queue=new LinkedList<>();
-        for(int i=0;i<l;i++){
-            //in
-            while(!queue.isEmpty() && nums[i]>nums[queue.peekLast()]){
-                queue.pollLast();
+        int len=nums.length;
+        int n=len-k+1;
+        int[] res=new int[n];
+        Deque<Integer> q=new LinkedList<>();
+        for(int i=0;i<len;i++){
+            while(!q.isEmpty()&&nums[i]>nums[q.peekLast()]){
+                q.pollLast();
             }
-            queue.addLast(i);
-            //out，窗口范围不再包含队列头上的元素
-            if(i-queue.peekFirst()>=k){
-                queue.pollFirst();
+            q.addLast(i);
+            if(i>=q.peekFirst()+k){
+                q.pollFirst();
             }
-            //ans
             if(i>=k-1){
-                res[i-k+1]=nums[queue.peekFirst()];
+                res[i-k+1]=nums[q.peekFirst()];
             }
-            queue.
         }
         return res;
     }
@@ -1288,19 +1287,80 @@ class Solution {
     }
 
     public int[] topKFrequent347(int[] nums, int k) {
-        Map<Integer, Integer> map = new HashMap<>();
-        for(int num : nums){
-            map.put(num, map.getOrDefault(num, 0) + 1);
+        int[] res=new int[k];
+        Map<Integer,Integer> map=new HashMap<>();
+        for(int n:nums){
+            map.put(n, map.getOrDefault(n,0)+1);
         }
-        PriorityQueue<int[]> pq = new PriorityQueue<>((pair1, pair2)->pair2[1]-pair1[1]);
-        for(Map.Entry<Integer, Integer> entry:map.entrySet()){
-            pq.add(new int[]{entry.getKey(), entry.getValue()});
+        PriorityQueue<int[]> pq=new PriorityQueue<>((arr1,arr2)->(arr2[1]-arr1[1]));
+        for(Map.Entry<Integer,Integer> entry:map.entrySet()){
+            int[] arr=new int[]{entry.getKey(),entry.getValue()};
+            pq.add(arr);
         }
-        int[] res = new int[k];
-        for(int i = 0; i < k; i++){
-            res[i] = pq.poll()[0];
+        for(int i=0;i<k;i++){
+            res[i]=pq.poll()[0];
         }
         return res;
+    }
+
+    public List<Integer> preorderTraversal144(TreeNode root) {
+        List<Integer> res=new ArrayList<>();
+        if(root==null){
+            return res;
+        }
+        preorderTraversal(root,res);
+        return res;
+    }
+
+    public List<Integer> postorderTraversal145(TreeNode root) {
+        List<Integer> res=new ArrayList<>();
+        if(root==null){
+            return res;
+        }
+        postorderTraversal(root,res);
+        return res;
+    }
+
+    public List<Integer> inorderTraversal94(TreeNode root) {
+        List<Integer> res=new ArrayList<>();
+        if(root==null){
+            return res;
+        }
+        inorderTraversal(root,res);
+        return res;
+    }
+
+    public void inorderTraversal(TreeNode node,List<Integer> list) {
+        if(node==null){
+            return;
+        }
+        inorderTraversal(node.left,list);
+        list.add(node.val);
+        inorderTraversal(node.right,list);
+    }
+
+    public void postorderTraversal(TreeNode node,List<Integer> list){
+        if(node==null){
+            return;
+        }
+        int n=node.val;
+        postorderTraversal(node.left,list);
+        postorderTraversal(node.right,list);
+        list.add(n);
+    }
+
+    public void preorderTraversal(TreeNode node,List<Integer> list){
+        int n=node.val;
+        list.add(n);
+        if(node.left!=null){
+            preorderTraversal(node.left,list);
+        }
+        if(node.right!=null){
+            preorderTraversal(node.right,list);
+        }
+        if(node.left==null && node.right==null){
+            return;
+        }
     }
 
     public void quickSort(int[] arr, int start, int end) {
