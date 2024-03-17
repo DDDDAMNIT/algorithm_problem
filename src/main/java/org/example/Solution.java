@@ -1312,12 +1312,56 @@ class Solution {
         return res;
     }
 
+    public List<Integer> preorderTraversal144_2(TreeNode root) {
+        List<Integer> res=new ArrayList<>();
+        Stack<TreeNode> stack=new Stack<>();
+        if(root==null){
+            return res;
+        }
+        stack.push(root);
+        while(!stack.isEmpty()){
+            TreeNode node=stack.pop();
+            res.add(node.val);
+            if(node.right!=null){
+                stack.push(node.right);
+            }
+            if(node.left!=null){
+                stack.push(node.left);
+            }
+        }
+        return res;
+    }
+
     public List<Integer> postorderTraversal145(TreeNode root) {
         List<Integer> res=new ArrayList<>();
         if(root==null){
             return res;
         }
         postorderTraversal(root,res);
+        return res;
+    }
+
+    public List<Integer> postorderTraversal145_2(TreeNode root) {
+        List<Integer> res=new ArrayList<>();
+        if(root==null){
+            return res;
+        }
+        Stack<TreeNode> stack=new Stack<>();
+        if(root==null){
+            return res;
+        }
+        stack.push(root);
+        while(!stack.isEmpty()){
+            TreeNode node=stack.pop();
+            res.add(node.val);
+            if(node.left!=null){
+                stack.push(node.left);
+            }
+            if(node.right!=null){
+                stack.push(node.right);
+            }
+        }
+        Collections.reverse(res);
         return res;
     }
 
@@ -1328,6 +1372,213 @@ class Solution {
         }
         inorderTraversal(root,res);
         return res;
+    }
+
+    public List<Integer> inorderTraversal94_2(TreeNode root) {
+        List<Integer> res=new ArrayList<>();
+        Stack<TreeNode> stack=new Stack<>();
+        if(root==null){
+            return res;
+        }
+        TreeNode node=root;
+        while(node!=null ||!stack.isEmpty()){
+            if(node!=null ){
+                stack.push(node);
+                node=node.left;
+            }else{
+                node=stack.pop();
+                res.add(node.val);
+                node=node.right;
+            }
+        }
+        return res;
+    }
+
+    public List<List<Integer>> levelOrder102(TreeNode root) {
+        List<List<Integer>> res=new ArrayList<>();
+        if(root==null){
+            return res;
+        }
+        Queue<TreeNode> queue=new LinkedList<>();
+        Queue<TreeNode> queue2=new LinkedList<>();
+        TreeNode node=root;
+        queue.add(node);
+        while(!queue.isEmpty() || !queue2.isEmpty()) {
+            levelOrderHelp(res, queue, queue2);
+            levelOrderHelp(res, queue2, queue);
+        }
+        return res;
+    }
+
+    public List<List<Integer>> levelOrderBottom107(TreeNode root) {
+        List<List<Integer>> res = levelOrder102(root);
+        Collections.reverse(res);
+        return res;
+    }
+
+    public List<Integer> rightSideView199(TreeNode root) {
+        List<Integer> res=new ArrayList<>();
+        if(root==null){
+            return res;
+        }
+        List<List<Integer>> res0=new ArrayList<>();
+        Queue<TreeNode> queue=new LinkedList<>();
+        Queue<TreeNode> queue2=new LinkedList<>();
+        TreeNode node=root;
+        queue.add(node);
+        while(!queue.isEmpty() || !queue2.isEmpty()) {
+            levelOrderHelp(res0, queue, queue2);
+            levelOrderHelp(res0, queue2, queue);
+        }
+        for(List<Integer> list:res0){
+            res.add(list.get(list.size()-1));
+        }
+        return res;
+    }
+
+    public List<Double> averageOfLevels637(TreeNode root) {
+        List<Double> res=new ArrayList<>();
+        if(root==null){
+            return res;
+        }
+        Queue<TreeNode> queue=new LinkedList<>();
+        Queue<TreeNode> queue2=new LinkedList<>();
+        queue.add(root);
+        while(!queue.isEmpty() || !queue2.isEmpty()){
+            averageOfLevelHelp(res, queue, queue2);
+            averageOfLevelHelp(res, queue2, queue);
+
+        }
+        return res;
+    }
+
+    public List<List<Integer>> levelOrder429(Node root) {
+        List<List<Integer>> res=new ArrayList<>();
+        if(root==null){
+            return res;
+        }
+        Queue<Node> queue=new LinkedList<>();
+        Queue<Node> queue2=new LinkedList<>();
+        queue.add(root);
+        while(!queue.isEmpty() || !queue2.isEmpty()) {
+            List<Integer> list=new ArrayList<>();
+            while (!queue.isEmpty()) {
+                Node node = queue.poll();
+                list.add(node.val);
+                if(node.children!=null&&!node.children.isEmpty()){
+                    for(Node node1: node.children){
+                        queue2.add(node1);
+                    }
+                }
+            }
+            if(!list.isEmpty()) {
+                res.add(list);
+            }
+
+            List<Integer> list2=new ArrayList<>();
+            while (!queue2.isEmpty()) {
+                Node node = queue2.poll();
+                list2.add(node.val);
+                if(node.children!=null&&!node.children.isEmpty()){
+                    for(Node node1: node.children){
+                        queue.add(node1);
+                    }
+                }
+            }
+            if(!list2.isEmpty()) {
+                res.add(list2);
+            }
+        }
+        return res;
+    }
+
+    public List<Integer> largestValues515(TreeNode root) {
+        List<Integer> res=new ArrayList<>();
+        if(root==null){
+            return res;
+        }
+        Queue<TreeNode> queue=new LinkedList<>();
+        Queue<TreeNode> queue2=new LinkedList<>();
+        TreeNode node=root;
+        queue.add(node);
+        while(!queue.isEmpty() || !queue2.isEmpty()) {
+            if(!queue.isEmpty()) {
+                int max = Integer.MIN_VALUE;
+                while (!queue.isEmpty()) {
+                    TreeNode node1 = queue.poll();
+                    if (node1.val > max) {
+                        max = node1.val;
+                    }
+                    if (node1.left != null) {
+                        queue2.add(node1.left);
+                    }
+                    if (node1.right != null) {
+                        queue2.add(node1.right);
+                    }
+                }
+                res.add(max);
+            }
+            if(!queue2.isEmpty()) {
+                int max2 = Integer.MIN_VALUE;
+                while (!queue2.isEmpty()) {
+                    TreeNode node1 = queue2.poll();
+                    if (node1.val > max2) {
+                        max2 = node1.val;
+                    }
+                    if (node1.left != null) {
+                        queue.add(node1.left);
+                    }
+                    if (node1.right != null) {
+                        queue.add(node1.right);
+                    }
+                }
+                res.add(max2);
+            }
+        }
+        return res;
+    }
+
+    private void averageOfLevelHelp(List<Double> res, Queue<TreeNode> queue, Queue<TreeNode> queue2) {
+        double sum=0;
+        int cnt=0;
+        int xx=0;
+        while(!queue.isEmpty()){
+            TreeNode node=queue.poll();
+            sum+=node.val;
+            cnt++;
+            if(node.left!=null){
+                queue2.add(node.left);
+            }else{
+                xx++;
+            }
+            if(node.right!=null){
+                queue2.add(node.right);
+            }
+            else{
+                xx++;
+            }
+        }
+        if(cnt!=0) {
+            res.add(sum / cnt);
+        }
+    }
+
+    private void levelOrderHelp(List<List<Integer>> res, Queue<TreeNode> queue, Queue<TreeNode> queue2) {
+        TreeNode node;
+        List<Integer> list=new ArrayList<>();
+        while (!queue.isEmpty()) {
+            node = queue.poll();
+            list.add(node.val);
+            if (node.left != null) {
+                queue2.add(node.left);
+            }
+            if (node.right != null) {
+                queue2.add(node.right);
+            }
+        }
+        if(!list.isEmpty()) {
+            res.add(list);
+        }
     }
 
     public void inorderTraversal(TreeNode node,List<Integer> list) {
